@@ -1,0 +1,9 @@
+BasedOnStyle: Mozilla
+
+SortIncludes: false
+ColumnLimit: 92
+ContinuationIndentWidth: 2
+IndentWidth: 4
+PointerAlignment: Right
+TabWidth: 4
+UseTab: ForIndentation
