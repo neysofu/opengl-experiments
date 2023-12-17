@@ -26,7 +26,6 @@ Shaders::Shaders(std::filesystem::path path)
 
 		// if the file extension is not .vert or .frag, skip it
 		if (ext != ".vert.glsl" && ext != ".frag.glsl") {
-			std::cout << "Skipping " << p.path() << std::endl;
 			continue;
 		}
 

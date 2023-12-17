@@ -17,9 +17,9 @@ quill::Logger *
 init_logging(void);
 
 void
-framebuffer_size_callback(GLFWwindow *window, int width, int height);
+framebuffer_size_callback(GLFWwindow *window, int32_t width, int32_t height);
 
-int
+int32_t
 main(void)
 {
 	quill::Logger *logger = init_logging();
@@ -57,9 +57,7 @@ void
 draw_triangle(Shaders &shaders)
 {
 	GLuint vertexShaderId = shaders.get("triangle.vert").id;
-	std::cout << vertexShaderId << std::endl;
 	GLuint fragmentShaderId = shaders.get("triangle.frag").id;
-	std::cout << fragmentShaderId << std::endl;
 
 	GLuint VAO;
 	glGenVertexArrays(1, &VAO);
@@ -69,7 +67,12 @@ draw_triangle(Shaders &shaders)
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	float vertices[] = { -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f };
+	const float vertices[] = {
+		-0.5f, -0.5f, 0.0f, // left
+		0.5f,  -0.5f, 0.0f, // right
+		0.0f,  0.5f,  0.0f  // top
+	};
+
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
@@ -96,9 +99,8 @@ draw_triangle(Shaders &shaders)
 }
 
 void
-framebuffer_size_callback(GLFWwindow *window, int width, int height)
+framebuffer_size_callback(GLFWwindow *window, int32_t width, int32_t height)
 {
-	// window is unused
 	(void)window;
 
 	glViewport(0, 0, width, height);

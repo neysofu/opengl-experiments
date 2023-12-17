@@ -16,6 +16,9 @@ class Window
 		 * <https://www.glfw.org/docs/latest/compat.html#compat_osx>
 		 */
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+		/** Supposedly helps with retina displays, although I haven't noticed a
+		 * change. */
+		glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);
 
 		window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 
