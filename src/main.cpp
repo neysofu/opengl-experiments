@@ -80,8 +80,12 @@ draw_triangle(Shaders &shaders)
 
 	int success;
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+	char infoLog[512];
 	if (!success) {
-		std::cout << "Failed to link shader program" << std::endl;
+		// print error
+		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		std::cout << "Failed to link shader program:" << std::endl;
+		std::cout << infoLog << std::endl;
 		exit(1);
 	}
 	glUseProgram(shaderProgram);
