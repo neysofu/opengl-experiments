@@ -57,7 +57,9 @@ void
 draw_triangle(Shaders &shaders)
 {
 	GLuint vertexShaderId = shaders.get("triangle.vert").id;
+	std::cout << vertexShaderId << std::endl;
 	GLuint fragmentShaderId = shaders.get("triangle.frag").id;
+	std::cout << fragmentShaderId << std::endl;
 
 	GLuint VAO;
 	glGenVertexArrays(1, &VAO);
