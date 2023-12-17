@@ -1,4 +1,5 @@
 #include <unordered_map>
+#include <iostream>
 #include <filesystem>
 
 #include "glad/glad.h"
@@ -20,6 +21,8 @@ class Shaders
 	{
 		// iterate over all files in the shaders directory
 		for (auto &p : std::filesystem::directory_iterator(path)) {
+			std::cout << p.path() << std::endl;
+
 			// get the file extension
 			auto ext = p.path().extension().string();
 

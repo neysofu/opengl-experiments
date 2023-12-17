@@ -53,6 +53,58 @@ main(void)
 	return 0;
 }
 
+void
+draw_triangle(Shaders &shaders)
+{
+	GLuint vertexShaderId = shaders.get("triangle.vert").id;
+	GLuint fragmentShaderId = shaders.get("triangle.frag").id;
+
+	GLuint VAO;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	GLuint VBO;
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	float vertices[] = { -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f };
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+	glEnableVertexAttribArray(0);
+
+	GLuint shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vertexShaderId);
+	glAttachShader(shaderProgram, fragmentShaderId);
+	glLinkProgram(shaderProgram);
+
+	int success;
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+	if (!success) {
+		std::cout << "Failed to link shader program" << std::endl;
+		exit(1);
+	}
+	glUseProgram(shaderProgram);
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+void
+framebuffer_size_callback(GLFWwindow *window, int width, int height)
+{
+	// window is unused
+	(void)window;
+
+	glViewport(0, 0, width, height);
+}
+
+void
+process_input(GLFWwindow *window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+}
+
 quill::Logger *
 init_logging(void)
 {
@@ -84,52 +136,4 @@ init_logging(void)
 	logger->init_backtrace(2u, quill::LogLevel::Critical);
 
 	return logger;
-}
-
-void
-draw_triangle(Shaders &shaders)
-{
-	float vertices[] = { -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f };
-
-	GLuint VAO, VBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-	glEnableVertexAttribArray(0);
-
-	GLuint vertexShaderId = shaders.get("triangle.vert").id;
-	GLuint fragmentShaderId = shaders.get("triangle.frag").id;
-
-	GLuint shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShaderId);
-	glAttachShader(shaderProgram, fragmentShaderId);
-	glLinkProgram(shaderProgram);
-
-	// Add shader linking error check here
-
-	glUseProgram(shaderProgram);
-	glBindVertexArray(VAO);
-
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	// Unbind VAO and other resources here
-}
-
-void
-framebuffer_size_callback(GLFWwindow *window, int width, int height)
-{
-	glViewport(0, 0, width, height);
-}
-
-void
-process_input(GLFWwindow *window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
 }
