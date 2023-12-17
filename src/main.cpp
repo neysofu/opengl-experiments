@@ -7,11 +7,16 @@
 #include "shaders.hpp"
 #include "window.hpp"
 
+struct __attribute__((packed)) Vertex
+{
+	float x, y, z;
+};
+
 void
 process_input(GLFWwindow *window);
 
 void
-draw_triangle(Shaders &shaders);
+draw_triangle(Shaders &shaders, const Vertex vertices[3]);
 
 quill::Logger *
 init_logging(void);
@@ -41,7 +46,12 @@ main(void)
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		draw_triangle(shaders);
+		const Vertex vertices[] = {
+			{ -0.5f, -0.5f, 0.0f }, // left
+			{ 0.5f, -0.5f, 0.0f },  // right
+			{ 0.0f, 0.5f, 0.0f }    // top
+		};
+		draw_triangle(shaders, vertices);
 
 		// check and call events and swap the buffers
 		glfwSwapBuffers(window.window);
@@ -54,7 +64,7 @@ main(void)
 }
 
 void
-draw_triangle(Shaders &shaders)
+draw_triangle(Shaders &shaders, const Vertex vertices[3])
 {
 	GLuint vertexShaderId = shaders.get("triangle.vert").id;
 	GLuint fragmentShaderId = shaders.get("triangle.frag").id;
@@ -67,15 +77,9 @@ draw_triangle(Shaders &shaders)
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	const float vertices[] = {
-		-0.5f, -0.5f, 0.0f, // left
-		0.5f,  -0.5f, 0.0f, // right
-		0.0f,  0.5f,  0.0f  // top
-	};
+	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(struct Vertex), vertices, GL_STATIC_DRAW);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (void *)0);
 	glEnableVertexAttribArray(0);
 
 	GLuint shaderProgram = glCreateProgram();
