@@ -62,11 +62,16 @@ set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 add_subdirectory("${LIB_DIR}/assimp")
 set_target_properties(assimp PROPERTIES COMPILE_FLAGS "-w")
 
+# Nlohmann's JSON
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+add_subdirectory("${LIB_DIR}/nlohmann-json")
+set_target_properties(assimp PROPERTIES COMPILE_FLAGS "-w")
+
 # Main target
 file(GLOB_RECURSE SRC_FILES "${SRC_DIR}/*.cpp")
 add_executable(opengl_experiments "${SRC_FILES}")
 target_include_directories(opengl_experiments SYSTEM PUBLIC "${LIB_DIR}")
-target_link_libraries(opengl_experiments PUBLIC glfw PRIVATE glad quill::quill)
+target_link_libraries(opengl_experiments PUBLIC glfw PRIVATE glad quill::quill nlohmann_json::nlohmann_json)
 target_compile_definitions(opengl_experiments PRIVATE
    PROJECT_BUILD_DATE=\"${BUILD_DATE}\"
    PROJECT_VERSION=\"${PROJECT_VERSION}\")

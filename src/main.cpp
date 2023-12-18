@@ -56,6 +56,12 @@ main(void)
 			{ 0.0f, 0.5f, 0.0f }    // top
 		};
 		draw_triangle(shaders, vertices);
+		const Vertex vertices2[] = {
+			{ 0.0f, 0.5f, 0.0f },
+			{ 0.5f, -0.5f, 0.0f },
+			{ -0.5f, -0.5f, 0.0f },
+		};
+		draw_triangle(shaders, vertices2);
 
 		// check and call events and swap the buffers
 		glfwSwapBuffers(window.window);
