@@ -35,6 +35,10 @@ main(void)
 	Window window = Window("LearnOpenGL", 800, 600);
 	LOG_DEBUG(logger, "Window created");
 
+	GLint max_vertex_attributes_count;
+	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &max_vertex_attributes_count);
+	LOG_DEBUG(logger, "Max vertex attributes count: {}", max_vertex_attributes_count);
+
 	Shaders shaders = Shaders(std::filesystem::path("./../../shaders"));
 	LOG_DEBUG(logger, "Successfully compiled all shaders");
 

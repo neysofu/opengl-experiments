@@ -55,6 +55,13 @@ set_target_properties(glfw PROPERTIES COMPILE_FLAGS "-w")
 add_subdirectory("${LIB_DIR}/quill")
 set_target_properties(quill PROPERTIES COMPILE_FLAGS "-w")
 
+# Assimp
+# See <https://github.com/assimp/assimp/blob/master/Build.md#manual-build-instructions>
+set(ASSIMP_WARNINGS_AS_ERRORS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+add_subdirectory("${LIB_DIR}/assimp")
+set_target_properties(assimp PROPERTIES COMPILE_FLAGS "-w")
+
 # Main target
 file(GLOB_RECURSE SRC_FILES "${SRC_DIR}/*.cpp")
 add_executable(opengl_experiments "${SRC_FILES}")
